@@ -15,7 +15,6 @@ function initMap() {
 	})
 }
 
-
 class Place {
 	constructor(location) {
 		this.name = ko.observable(location.name)
