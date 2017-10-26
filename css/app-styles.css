@@ -10,6 +10,17 @@ body {
     padding: 0;
 }
 
+
+
+ul.displaying-list li.place-entry {
+	list-style-type: none;  	
+	cursor: pointer;
+}
+
+ul.displaying-list li.place-entry:hover{
+	background: #cde4fc;
+}
+
 .container {
 	height: 100%;
 	width: 100%;
