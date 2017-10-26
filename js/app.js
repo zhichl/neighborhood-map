@@ -7,20 +7,39 @@ let viewModel
 class ViewModel {
 	constructor(locations) {
 		this.places = getPlaces(locations)
+		this.displayingList = this.places
 	}
+
+	filter(content) {
+		let results = ko.observable([])
+		for(let place of this.places()) {
+			const matched = place().checkMatch(content)
+			if(matched) {
+				results().push(place)
+			} 
+		}
+
+		return results
+	}
+
 }
 
 class Place {
 	constructor(location) {
-		this.name = ko.observable(location.name)
-		this.address = ko.observable(location.address)
-		this.position = ko.observable(location.position)
-		this.types = ko.observable(location.types)
-		this.placeID = ko.observable(location.placeID)
+		// this.name = ko.observable(location.name)
+		this.name = location.name
+		this.address = location.address
+		this.position = location.position
+		this.types = location.types
+		this.placeID = location.placeID
 	}
-}
 
-initApp()
+	checkMatch(content) {
+		// TODO: test invalid string
+
+	}
+
+}
 
 function getPlaces(locations) {
 	let places = ko.observable([])
@@ -30,27 +49,29 @@ function getPlaces(locations) {
 	return places
 }
 
-function initApp() {
+function initViewModel() {
 	viewModel = new ViewModel(locations)
 	ko.applyBindings(viewModel)
 }
 
 function initMap() {
-	const sfMarinaMiddleSchool = {
-		lat: 37.801739,
-		lng: -122.436123
+	const palceOfFineArtsTheatre = {
+		lat: 37.801991,
+		lng: -122.448656
 	}
 	const map = new google.maps.Map(document.getElementById("map-view"), {
 		zoom: 14,
-		center: sfMarinaMiddleSchool,
+		center: palceOfFineArtsTheatre,
 		styles: mapStyles
 	})
 
 	let markers = []
 	for (let place of viewModel.places()) {
 		markers.push(new google.maps.Marker({
-			position: place().position(),
+			position: place().position,
 			map: map
 		}))
 	}
+
+	viewModel();
 }
