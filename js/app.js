@@ -5,8 +5,8 @@
 let viewModel
 
 class ViewModel {
-	constructor(locations) {
-		this.places = getPlaces(locations)
+	constructor(map, locations) {
+		this.places = getPlaces(map, locations)
 		this.displayingList = this.places
 	}
 
@@ -25,13 +25,17 @@ class ViewModel {
 }
 
 class Place {
-	constructor(location) {
+	constructor(map, location) {
 		// this.name = ko.observable(location.name)
 		this.name = location.name
 		this.address = location.address
 		this.position = location.position
 		this.types = location.types
 		this.placeID = location.placeID
+		this.marker = new google.maps.Marker({
+			position: this.position,
+			map: map
+		})
 	}
 
 	checkMatch(content) {
@@ -41,16 +45,16 @@ class Place {
 
 }
 
-function getPlaces(locations) {
+function getPlaces(map, locations) {
 	let places = ko.observable([])
 	for (let loc of locations) {
-		places().push(ko.observable(new Place(loc)))
+		places().push(ko.observable(new Place(map, loc)))
 	}
 	return places
 }
 
-function initViewModel() {
-	viewModel = new ViewModel(locations)
+function initViewModel(map, locations) {
+	viewModel = new ViewModel(map, locations)
 	ko.applyBindings(viewModel)
 }
 
@@ -65,13 +69,5 @@ function initMap() {
 		styles: mapStyles
 	})
 
-	let markers = []
-	for (let place of viewModel.places()) {
-		markers.push(new google.maps.Marker({
-			position: place().position,
-			map: map
-		}))
-	}
-
-	viewModel();
+	initViewModel(map, locations)
 }
