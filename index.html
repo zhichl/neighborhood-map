@@ -9,26 +9,21 @@
 </head>
 <body>
 	<div class="container">
-		<div class="place-list-view">
-			<div class="filter-bar">
-
-			</div>
-
-			<div class="place-list">
-					<ul class="place-list" data-bind="foreach: ">
-					</ul>
-			</div>
-		</div>
-
-
 		<div id="map-view">
 
 		</div>
+		<div class="place-list-view">
+			<input type="text" class="filter-bar">
+			<div class="place-list" >
+					<ul class="displaying-list" data-bind="foreach: displayingList">
+						<li class="place-entry" data-bind="text: name"></li>
+					</ul>
+			</div>
+		</div>
 	</div>
 
-
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
-	<script src="./js/models/places.js"></script>	
+	<script src="./js/models/locations.js"></script>	
 	<script src="./js/styles/map_styles.js"></script>	
 	<script src="./js/app.js"></script>	
 	<script async defer 
