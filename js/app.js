@@ -2,17 +2,12 @@
 
 // import { mapStyles } from "./views/map_styles.js"
 
-function initMap() {
-	const sf = {lat: 37.77493, lng: -122.419416}
-	const map = new google.maps.Map(document.getElementById("map"), {
-		zoom: 14,
-		center: sf,
-		styles: mapStyles
-	})
-	const marker = new google.maps.Marker({
-		position: sf,
-		map: map
-	})
+let viewModel
+
+class ViewModel {
+	constructor(locations) {
+		this.places = getPlaces(locations)
+	}
 }
 
 class Place {
@@ -25,24 +20,37 @@ class Place {
 	}
 }
 
-class ViewModel {
-	constructor(locations) {
-		this.places = getPlaces(locations)
-	}
-}
+initApp()
 
 function getPlaces(locations) {
 	let places = ko.observable([])
-	for(let loc of locations) {
-		places.push(ko.observable(new Place(loc)))
+	for (let loc of locations) {
+		places().push(ko.observable(new Place(loc)))
 	}
 	return places
 }
 
-
 function initApp() {
-	const viewModel = new ViewModel(locations)
+	viewModel = new ViewModel(locations)
 	ko.applyBindings(viewModel)
 }
 
+function initMap() {
+	const sfMarinaMiddleSchool = {
+		lat: 37.801739,
+		lng: -122.436123
+	}
+	const map = new google.maps.Map(document.getElementById("map-view"), {
+		zoom: 14,
+		center: sfMarinaMiddleSchool,
+		styles: mapStyles
+	})
 
+	let markers = []
+	for (let place of viewModel.places()) {
+		markers.push(new google.maps.Marker({
+			position: place().position(),
+			map: map
+		}))
+	}
+}
