@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,27 +8,27 @@
 	<link rel="stylesheet" href="./css/app-styles.css">
 	<title>SF Neighborhood Map</title>
 </head>
+
 <body>
 	<div class="container">
 		<div id="map-view">
 
 		</div>
 		<div class="place-list-view">
-			<input type="text" class="filter-bar">
-			<div class="place-list" >
-					<ul class="displaying-list" data-bind="foreach: displayingList">
-						<li class="place-entry" data-bind="text: name"></li>
-					</ul>
+			<input type="text" placeholder="Type to filter.." class="filter-bar" data-bind="textInput: filterInput, event: {keyup: filter}">
+			<div class="place-list">
+				<ul class="displaying-list" data-bind="foreach: places">
+					<li class="place-entry" data-bind="text: name, visible: show"></li>
+				</ul>
 			</div>
 		</div>
 	</div>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
-	<script src="./js/models/locations.js"></script>	
-	<script src="./js/styles/map_styles.js"></script>	
-	<script src="./js/app.js"></script>	
-	<script async defer 
-			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApra2xbeCqSL992NuODd48ZFc-qjJWzso&callback=initMap">
+	<script src="./js/models/locations.js"></script>
+	<script src="./js/styles/map_styles.js"></script>
+	<script src="./js/app.js"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApra2xbeCqSL992NuODd48ZFc-qjJWzso&callback=initMap">
 	</script>
 
 </body>
