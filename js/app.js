@@ -6,8 +6,9 @@ let viewModel
 
 class ViewModel {
 	constructor(map, locations) {
-		this.places = getPlaces(map, locations)
+		this.places = getPlaces(map, locations, this)
 		this.filterInput = ""
+		this.currentInfoWindow = null
 	}
 
 	filter() {
@@ -16,12 +17,11 @@ class ViewModel {
 			const matched = place().checkMatch(this.filterInput)
 			// match the filter content
 			if(matched) {
-				// console.log(`name: ${place().name}, show: ${place().show}`)
-				place().show(true)
+				place().showInList(true)
 				place().showMarker()
 			// doens't match
 			} else {
-				place().show(false)
+				place().showInList(false)
 				place().hideMarker()
 			}
 		}
@@ -30,8 +30,7 @@ class ViewModel {
 }
 
 class Place {
-	constructor(map, location) {
-		// this.name = ko.observable(location.name)
+	constructor(map, location, viewModel) {
 		this.name = location.name
 		this.address = location.address
 		this.position = location.position
@@ -39,9 +38,16 @@ class Place {
 		this.placeID = location.placeID
 		this.marker = new google.maps.Marker({
 			position: this.position,
-			map: map
+			map: map,
+			animation: google.maps.Animation.DROP
 		})
-		this.show = ko.observable(true)
+		this.showInList = ko.observable(true)
+
+		this.marker.addListener("click", () => {
+			// when clicked, marker bounces once 
+			bounceOnce(this.marker)
+
+		})
 	}
 
 	checkMatch(content) {
@@ -58,6 +64,17 @@ class Place {
 
 	hideMarker() {
 		this.marker.setVisible(false)
+	}
+
+	bounce() {
+		this.marker.setAnimation(google.maps.Animation.BOUNCE)
+		setTimeout(() => {
+			this.marker.setAnimation(null)
+		}, 1400)
+	}
+
+	onListClick() {
+		bounceOnce(this.marker)
 	}
 
 }
@@ -87,4 +104,12 @@ function initMap() {
 	})
 
 	initViewModel(map, locations)
+}
+
+// marker bounces once in 700ms
+function bounceOnce(marker) {
+	marker.setAnimation(google.maps.Animation.BOUNCE)
+	setTimeout(() => {
+		marker.setAnimation(null)
+	}, 700)
 }
