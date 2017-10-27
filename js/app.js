@@ -1,5 +1,5 @@
 /* global google, mapStyles, locations, ko*/
-
+"use strict"
 // import { mapStyles } from "./views/map_styles.js"
 
 let viewModel
@@ -7,19 +7,24 @@ let viewModel
 class ViewModel {
 	constructor(map, locations) {
 		this.places = getPlaces(map, locations)
-		this.displayingList = this.places
+		this.filterInput = ""
 	}
 
-	filter(content) {
-		let results = ko.observable([])
+	filter() {
 		for(let place of this.places()) {
-			const matched = place().checkMatch(content)
+			// console.log(this.filterInput)
+			const matched = place().checkMatch(this.filterInput)
+			// match the filter content
 			if(matched) {
-				results().push(place)
-			} 
+				// console.log(`name: ${place().name}, show: ${place().show}`)
+				place().show(true)
+				place().showMarker()
+			// doens't match
+			} else {
+				place().show(false)
+				place().hideMarker()
+			}
 		}
-
-		return results
 	}
 
 }
@@ -36,11 +41,23 @@ class Place {
 			position: this.position,
 			map: map
 		})
+		this.show = ko.observable(true)
 	}
 
 	checkMatch(content) {
-		// TODO: test invalid string
+		let matched = (false || content === "")
+		if (content !== "") {
+			matched = this.name.toLowerCase().includes(content.toLowerCase())
+		}
+		return matched
+	}
 
+	showMarker() {
+		this.marker.setVisible(true)
+	}
+
+	hideMarker() {
+		this.marker.setVisible(false)
 	}
 
 }
