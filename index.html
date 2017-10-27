@@ -18,7 +18,7 @@
 			<input type="text" placeholder="Type to filter.." class="filter-bar" data-bind="textInput: filterInput, event: {keyup: filter}">
 			<div class="place-list">
 				<ul class="displaying-list" data-bind="foreach: places">
-					<li class="place-entry" data-bind="text: name, visible: show"></li>
+					<li class="place-entry" data-bind="text: name, visible: showInList, click: onListClick"></li>
 				</ul>
 			</div>
 		</div>
