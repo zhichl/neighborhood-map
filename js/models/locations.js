@@ -5,12 +5,12 @@ const locations = [{
 		lat: 37.809398, 
 		lng: -122.410355
 	},
-	types: "Types: bar, establishment, food, point_of_interest, restaurant",
+	types: "bar, establishment, food, point_of_interest, restaurant",
 	placeID: "ChIJ9T3A5PyAhYARce9_Mje3PoE"
 },
 
 {
-	name: "China Town",
+	name: "China Town San Francisco",
 	address: "Chinatown, San Francisco, CA, USA",
 	position: {
 		lat: 37.794138,
