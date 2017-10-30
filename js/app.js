@@ -21,7 +21,6 @@ class ViewModel {
 		this.infoWindow.close()
 		let showPlaces = []
 		for(let place of this.places()) {
-			// console.log(this.filterInput)
 			const matched = place().checkMatch(this.filterInput)
 			// match the filter content
 			if(matched) {
@@ -72,13 +71,15 @@ class ViewModel {
 		}
 		$.ajax(config)
 			.done((data) => {
-				console.log(data)
 				const photos = data.photos.photo
 				const singlePhoto = photos[2]
 				const imgURL = getFlikrImgURL(singlePhoto)
 				const pageURL = getFlikrWebPageURL(singlePhoto)
 				$(".flickr-content").append(`<img class="flickr-img" alt="No photo from Flickr.com" src=${imgURL}>`)
 				$(".flickr-discription").html(`Click <a href=${pageURL} target="_blank">here</a> to see more about the photo`)
+				// re-center the map when info-window pops up and photo is added
+				// TODO: pan the map by the center of the whole infoWindow when image is added
+				this.map.panBy(0, -150)
 			})
 			.fail(() => {
 				$(".flickr-discription").text("Failed to fetch photos from Flickr.com, please reload the page")
