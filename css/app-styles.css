@@ -40,15 +40,22 @@ ul.displaying-list li.place-entry:hover{
 	width: 70%;
 }
 
-
-
-
 /* Styles for map view */
 #map-view {
 	height: 100%;
 	width: 100%;
-	
-	
+}
+
+.flickr-content .flickr-img {
+	width: 200px;
+}
+
+.opacity-normal {
+	opacity:1.0;
+}
+
+.opacity-dim {
+	opacity:0.3;
 }
 
 
