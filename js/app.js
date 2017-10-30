@@ -69,7 +69,7 @@ class ViewModel {
 				const imgURL = getFlikrImgURL(singlePhoto)
 				const pageURL = getFlikrWebPageURL(singlePhoto)
 				$(".flickr-content").append(`<img class="flickr-img" alt="No photo from Flickr.com" src=${imgURL}>`)
-				$(".flickr-discription").html(`Click <a href=${pageURL} target="_blank">here</a> to see more info about the photo`)
+				$(".flickr-discription").html(`Click <a href=${pageURL} target="_blank">here</a> to see more about the photo`)
 			})
 			.fail(() => {
 				$(".flickr-discription").text("Failed to fetch photos from Flickr.com, please reload the page")
