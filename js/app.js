@@ -111,6 +111,7 @@ class Place {
 	}
 
 	focus() {
+		this.map.setCenter(this.position)
 		this.viewModel.focusPlace(this)
 	}
 
@@ -154,4 +155,19 @@ function bounceOnce(marker) {
 	setTimeout(() => {
 		marker.setAnimation(null)
 	}, 700)
+}
+
+// fetch photos from Flickr, using Flickr API
+function getPhotos(place) {
+	const flickrAPI = `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=48b43a42e4a2b9136fd55678f58ddc3e&text=${place.name}&sort=relevance&per_page=20&format=json&nojsoncallback=1`
+	const config = {
+		url: flickrAPI,
+
+	}
+	
+	$.ajax(config).done().fail()
+}
+
+function addPhotos() {
+
 }
