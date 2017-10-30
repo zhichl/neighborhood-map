@@ -8,7 +8,13 @@ class ViewModel {
 	constructor(map, locations) {
 		this.places = getPlaces(map, locations, this)
 		this.filterInput = ""
-		this.currentInfoWindow = null
+		this.currentPlaceID = null
+		this.currentPlaceChanged = false
+		this.infoWindow = new google.maps.InfoWindow({
+			content: 'Test',
+			// disableAutoPan: true
+		})
+		this.mapOpacity = ko.observable("opacityNormal")
 	}
 
 	filter() {
@@ -27,10 +33,39 @@ class ViewModel {
 		}
 	}
 
+	setInfoWindow(place) {
+		// if current place changed, make a new request and set new content
+		if(this.currentPlaceChanged) {
+			this.infoWindow.setContent(`<h3> ${place.name} </h3>`)
+		} else {
+			console.log("same place")
+		}
+	}
+
+	focusPlace(place) {
+		if(this.currentPlaceID === place.placeID) {
+			this.currentPlaceChanged = false
+		} else {
+			this.currentPlaceID = place.placeID
+			this.currentPlaceChanged = true
+		}
+		
+	}
+
+	// toggleMapDim() {
+	// 	if(this.mapOpacity() === "opacityNormal") {
+	// 		this.mapOpacity("opacityDim")
+	// 	} else {
+	// 		this.mapOpacity("opacityNormal")
+	// 	}
+	// }
+
 }
 
 class Place {
 	constructor(map, location, viewModel) {
+		this.map = map
+		this.viewModel = viewModel
 		this.name = location.name
 		this.address = location.address
 		this.position = location.position
@@ -44,9 +79,11 @@ class Place {
 		this.showInList = ko.observable(true)
 
 		this.marker.addListener("click", () => {
+			this.focus()
 			// when clicked, marker bounces once 
 			bounceOnce(this.marker)
-
+			// viewModel.toggleMapDim()
+			this.showInfoWindow()
 		})
 	}
 
@@ -66,23 +103,28 @@ class Place {
 		this.marker.setVisible(false)
 	}
 
-	bounce() {
-		this.marker.setAnimation(google.maps.Animation.BOUNCE)
-		setTimeout(() => {
-			this.marker.setAnimation(null)
-		}, 1400)
+	onListClick() {
+		this.focus()
+		// when clicked, marker bounces once 
+		bounceOnce(this.marker)
+		this.showInfoWindow()
 	}
 
-	onListClick() {
-		bounceOnce(this.marker)
+	focus() {
+		this.viewModel.focusPlace(this)
+	}
+
+	showInfoWindow() {
+		this.viewModel.setInfoWindow(this)
+		this.viewModel.infoWindow.open(this.map, this.marker)
 	}
 
 }
 
-function getPlaces(map, locations) {
+function getPlaces(map, locations, viewModel) {
 	let places = ko.observable([])
 	for (let loc of locations) {
-		places().push(ko.observable(new Place(map, loc)))
+		places().push(ko.observable(new Place(map, loc, viewModel)))
 	}
 	return places
 }
@@ -93,13 +135,13 @@ function initViewModel(map, locations) {
 }
 
 function initMap() {
-	const palceOfFineArtsTheatre = {
-		lat: 37.801991,
-		lng: -122.448656
+	const lombaStreet = {
+		lat: 37.802139,
+		lng: -122.41874
 	}
 	const map = new google.maps.Map(document.getElementById("map-view"), {
 		zoom: 14,
-		center: palceOfFineArtsTheatre,
+		center: lombaStreet,
 		styles: mapStyles
 	})
 
