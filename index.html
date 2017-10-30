@@ -11,9 +11,8 @@
 
 <body>
 	<div class="container">
-		<div id="map-view">
-
-		</div>
+		<!-- <div id="map-view" data-bind="css: mapOpacity"> -->
+		<div id="map-view"></div>
 		<div class="place-list-view">
 			<input type="text" placeholder="Type to filter.." class="filter-bar" data-bind="textInput: filterInput, event: {keyup: filter}">
 			<div class="place-list">
@@ -24,6 +23,8 @@
 		</div>
 	</div>
 
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+	    crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
 	<script src="./js/models/locations.js"></script>
 	<script src="./js/styles/map_styles.js"></script>
