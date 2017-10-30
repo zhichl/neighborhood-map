@@ -6,23 +6,26 @@ let viewModel
 
 class ViewModel {
 	constructor(map, locations) {
+		this.map = map
 		this.places = getPlaces(map, locations, this)
 		this.filterInput = ""
 		this.currentPlaceID = null
 		this.currentPlaceChanged = false
 		this.infoWindow = new google.maps.InfoWindow({
-			content: 'Test',
-			// disableAutoPan: true
+			disableAutoPan: true
 		})
 		this.mapOpacity = ko.observable("opacity-normal")
 	}
 
 	filter() {
+		this.infoWindow.close()
+		let showPlaces = []
 		for(let place of this.places()) {
 			// console.log(this.filterInput)
 			const matched = place().checkMatch(this.filterInput)
 			// match the filter content
 			if(matched) {
+				showPlaces.push(place())
 				place().showInList(true)
 				place().showMarker()
 			// doens't match
@@ -30,6 +33,12 @@ class ViewModel {
 				place().showInList(false)
 				place().hideMarker()
 			}
+		}
+		
+		// dynamically pan the map to the center of displaying places
+		if(showPlaces.length > 0) {
+			const averagePosition = calAveragePosition(showPlaces)
+			this.map.panTo(averagePosition)
 		}
 	}
 
@@ -65,7 +74,7 @@ class ViewModel {
 			.done((data) => {
 				console.log(data)
 				const photos = data.photos.photo
-				const singlePhoto = photos[0]
+				const singlePhoto = photos[2]
 				const imgURL = getFlikrImgURL(singlePhoto)
 				const pageURL = getFlikrWebPageURL(singlePhoto)
 				$(".flickr-content").append(`<img class="flickr-img" alt="No photo from Flickr.com" src=${imgURL}>`)
@@ -207,4 +216,17 @@ function getFlikrWebPageURL(img) {
 		pageURL = `https://www.flickr.com/photos/${img.owner}/${img.id}`
 	}
 	return pageURL
+}
+
+function calAveragePosition(places) {
+	let pos = {lat: 0, lng: 0}
+	if(places.length > 0) {
+		for(let place of places) {
+			pos.lat += place.position.lat
+			pos.lng += place.position.lng
+		}
+		pos.lat /= places.length
+		pos.lng /= places.length
+	}
+	return pos
 }
