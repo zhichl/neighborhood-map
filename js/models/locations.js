@@ -54,7 +54,7 @@ const locations = [{
 },
 
 {
-	name: "Asian Art Museum",
+	name: "Asian Art Museum San Francisco",
 	address: "200 Larkin St, San Francisco, CA 94102, USA",
 	position: {	
 		lat: 37.780164,
