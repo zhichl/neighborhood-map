@@ -14,7 +14,7 @@ class ViewModel {
 			content: 'Test',
 			// disableAutoPan: true
 		})
-		this.mapOpacity = ko.observable("opacityNormal")
+		this.mapOpacity = ko.observable("opacity-normal")
 	}
 
 	filter() {
@@ -34,12 +34,46 @@ class ViewModel {
 	}
 
 	setInfoWindow(place) {
-		// if current place changed, make a new request and set new content
+		// if current place changed, get new request and set new content
+		// info contents are automatically cached by browser
 		if(this.currentPlaceChanged) {
-			this.infoWindow.setContent(`<h3> ${place.name} </h3>`)
-		} else {
-			console.log("same place")
+			const infoWindowHTML = this.getInfoWindowHTML(place)
+			this.infoWindow.setContent(infoWindowHTML)
+			this.addPhotos(place)
 		}
+	}
+
+	getInfoWindowHTML(place) {
+		const content = 
+		`<div class="info-window-content"> 
+			<h3>${place.name}</h3>
+			<div class="flickr-content">
+				<p class="flickr-discription"></p>
+			</div>
+		</div>`
+		return content
+	}
+
+	addPhotos(place) {
+		// fetch photos from Flickr, using flickr.photos.search API method
+		// returns the first search result page with keyword of place name, 20 photos per-page
+		const flickrAPI = `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=e3b686486ab791a3710f892b7e5055c0&text=${place.name}&sort=relevance&per_page=20&page=1&format=json&nojsoncallback=1`
+		const config = {
+			url: flickrAPI
+		}
+		$.ajax(config)
+			.done((data) => {
+				console.log(data)
+				const photos = data.photos.photo
+				const singlePhoto = photos[0]
+				const imgURL = getFlikrImgURL(singlePhoto)
+				const pageURL = getFlikrWebPageURL(singlePhoto)
+				$(".flickr-content").append(`<img class="flickr-img" alt="No photo from Flickr.com" src=${imgURL}>`)
+				$(".flickr-discription").html(`Click <a href=${pageURL} target="_blank">here</a> to see more info about the photo`)
+			})
+			.fail(() => {
+				$(".flickr-discription").text("Failed to fetch photos from Flickr.com, please reload the page")
+			})
 	}
 
 	focusPlace(place) {
@@ -49,14 +83,13 @@ class ViewModel {
 			this.currentPlaceID = place.placeID
 			this.currentPlaceChanged = true
 		}
-		
 	}
-
+	
 	// toggleMapDim() {
-	// 	if(this.mapOpacity() === "opacityNormal") {
-	// 		this.mapOpacity("opacityDim")
+	// 	if(this.mapOpacity() === "opacity-normal") {
+	// 		this.mapOpacity("opacity-dim")
 	// 	} else {
-	// 		this.mapOpacity("opacityNormal")
+	// 		this.mapOpacity("opacity-normal")
 	// 	}
 	// }
 
@@ -111,6 +144,8 @@ class Place {
 	}
 
 	focus() {
+		// recenter the map by marker's position
+		// use panTo() over setCenter() to add smooth transition effect and prevent reloading the map
 		this.map.panTo(this.position)
 		this.viewModel.focusPlace(this)
 	}
@@ -122,19 +157,7 @@ class Place {
 
 }
 
-function getPlaces(map, locations, viewModel) {
-	let places = ko.observable([])
-	for (let loc of locations) {
-		places().push(ko.observable(new Place(map, loc, viewModel)))
-	}
-	return places
-}
-
-function initViewModel(map, locations) {
-	viewModel = new ViewModel(map, locations)
-	ko.applyBindings(viewModel)
-}
-
+// called as callback when map finishes loading
 function initMap() {
 	const lombaStreet = {
 		lat: 37.802139,
@@ -149,6 +172,19 @@ function initMap() {
 	initViewModel(map, locations)
 }
 
+function initViewModel(map, locations) {
+	viewModel = new ViewModel(map, locations)
+	ko.applyBindings(viewModel)
+}
+
+function getPlaces(map, locations, viewModel) {
+	let places = ko.observable([])
+	for (let loc of locations) {
+		places().push(ko.observable(new Place(map, loc, viewModel)))
+	}
+	return places
+}
+
 // marker bounces once in 700ms
 function bounceOnce(marker) {
 	marker.setAnimation(google.maps.Animation.BOUNCE)
@@ -157,17 +193,18 @@ function bounceOnce(marker) {
 	}, 700)
 }
 
-// fetch photos from Flickr, using Flickr API
-function getPhotos(place) {
-	const flickrAPI = `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=48b43a42e4a2b9136fd55678f58ddc3e&text=${place.name}&sort=relevance&per_page=20&format=json&nojsoncallback=1`
-	const config = {
-		url: flickrAPI,
-
+function getFlikrImgURL(img) {
+	let imgURL = ""
+	if(img) {
+		imgURL = `https://farm${img.farm}.staticflickr.com/${img.server}/${img.id}_${img.secret}.jpg`
 	}
-	
-	$.ajax(config).done().fail()
+	return imgURL
 }
 
-function addPhotos() {
-
+function getFlikrWebPageURL(img) {
+	let pageURL = ""
+	if(img) {
+		pageURL = `https://www.flickr.com/photos/${img.owner}/${img.id}`
+	}
+	return pageURL
 }
