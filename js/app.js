@@ -111,7 +111,7 @@ class Place {
 	}
 
 	focus() {
-		this.map.setCenter(this.position)
+		this.map.panTo(this.position)
 		this.viewModel.focusPlace(this)
 	}
 
