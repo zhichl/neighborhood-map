@@ -75,16 +75,16 @@ const locations = [{
 	placeID: "ChIJ5WLIyuWAhYARbzm2ZWKavPY" 
 },
 
-{
-	name: "Golden Gate Bridge",
-	address: "Golden Gate Bridge, San Francisco, CA, USA",
-	position: {
-		lat: 37.819929,
-		lng: -122.478255
-	},
-	types: "establishment, point_of_interest",
-	placeID: "ChIJw____96GhYARCVVwg5cT7c0" 
-},
+// {
+// 	name: "Golden Gate Bridge",
+// 	address: "Golden Gate Bridge, San Francisco, CA, USA",
+// 	position: {
+// 		lat: 37.819929,
+// 		lng: -122.478255
+// 	},
+// 	types: "establishment, point_of_interest",
+// 	placeID: "ChIJw____96GhYARCVVwg5cT7c0" 
+// },
 
 {
 	name: "Alcatraz Island",
