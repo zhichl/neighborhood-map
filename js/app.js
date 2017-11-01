@@ -6,6 +6,11 @@ let viewModel
 class ViewModel {
 	constructor(map, locations) {
 		this.map = map
+
+		// the view port center corresponded on the map is not the same as the original map.center
+		// init viewPortMapCenter as map.center, it can get updated by this.updateViewPortMapCenter()
+		this.viewPortMapCenter = this.map.getCenter()
+
 		this.places = getPlaces(map, locations, this)
 		this.filterInput = ""
 		this.currentPlaceID = null
@@ -14,7 +19,13 @@ class ViewModel {
 			disableAutoPan: true
 		})
 		this.mapOpacity = ko.observable("opacity-normal")
-		this.showList = ko.observable("showList")
+		this.showList = ko.observable("")
+		this.responsiveWidth = 450
+
+		// responsive
+		google.maps.event.addDomListener(window, "resize", () => {
+			this.map.panTo(this.viewPortMapCenter)
+		})
 	}
 
 	filter() {
@@ -38,6 +49,7 @@ class ViewModel {
 		if(showPlaces.length > 0) {
 			const averagePosition = calAveragePosition(showPlaces)
 			this.map.panTo(averagePosition)
+			this.updateViewPortMapCenter()
 		}
 	}
 
@@ -80,6 +92,7 @@ class ViewModel {
 				// re-pan the map when info-window pops up and photo is added
 				// TODO: pan the map by the center of the whole infoWindow when image is added
 				this.map.panBy(0, -150)
+				this.updateViewPortMapCenter()
 			})
 			.fail(() => {
 				$(".flickr-discription").text("Failed to fetch photos from Flickr.com, please reload the page")
@@ -93,15 +106,30 @@ class ViewModel {
 			this.currentPlaceID = place.placeID
 			this.currentPlaceChanged = true
 			this.map.panTo(place.position)
+			this.updateViewPortMapCenter()
 		}
 	}
 
 	toggleList() {
-		if(this.showList() === "showList") {
+		if(this.showList() === "showList" || this.showList() === "") {
 			this.showList("hideList")
 		} else {
 			this.showList("showList")
 		}
+	}
+
+	hideList() {
+		this.showList("hideList")
+	}
+
+	updateViewPortMapCenter() {
+		const 
+			lat0 = this.map.getBounds().getSouthWest().lat(),
+			lng0 = this.map.getBounds().getSouthWest().lng(),
+			lat1 = this.map.getBounds().getNorthEast().lat(),
+			lng1 = this.map.getBounds().getNorthEast().lng()
+
+		this.viewPortMapCenter = {lat: (lat1 - lat0) / 2 + lat0, lng: (lng1 - lng0) / 2 + lng0}
 	}
 
 }
@@ -123,10 +151,12 @@ class Place {
 		this.showInList = ko.observable(true)
 
 		this.marker.addListener("click", () => {
+			if($(window).width() < this.viewModel.responsiveWidth) {
+				this.viewModel.hideList()
+			}
 			this.focus()
 			// when clicked, marker bounces once 
 			bounceOnce(this.marker)
-			// viewModel.toggleMapDim()
 			this.showInfoWindow()
 		})
 	}
@@ -149,6 +179,9 @@ class Place {
 	}
 
 	onListClick() {
+		if($(window).width() < this.viewModel.responsiveWidth) {
+			this.viewModel.hideList()
+		}
 		this.focus()
 		// when clicked, marker bounces once 
 		bounceOnce(this.marker)
