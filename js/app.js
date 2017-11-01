@@ -14,6 +14,7 @@ class ViewModel {
 			disableAutoPan: true
 		})
 		this.mapOpacity = ko.observable("opacity-normal")
+		this.showList = ko.observable("showList")
 	}
 
 	filter() {
@@ -94,6 +95,15 @@ class ViewModel {
 			this.map.panTo(place.position)
 		}
 	}
+
+	toggleList() {
+		if(this.showList() === "showList") {
+			this.showList("hideList")
+		} else {
+			this.showList("showList")
+		}
+	}
+
 }
 
 class Place {
