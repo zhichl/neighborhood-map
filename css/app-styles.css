@@ -25,7 +25,7 @@ body {
 	left: 0;
 	width: 100%;
 	height: 50px;
-	border: 2px solid rgb(201, 194, 194)
+	border: 2px solid rgb(201, 194, 194);
 }
 
 .top-bar .header {
@@ -33,7 +33,7 @@ body {
 }
 
 .top-bar .header h1{
-	margin: 0;
+	font-family: 'Bree Serif', serif;
 }
 
 .list-button {
@@ -57,6 +57,8 @@ body {
 	/* background-color: #FFF; */
 	background-color:#6dbbd7;
 	transition: 0.2s ease-out;
+	border-radius: 3px;
+	left: 0;
 }
 
 .place-list-view.showList{
@@ -67,15 +69,20 @@ body {
 	left: -310px;
 }
 
+.place-list-view .displaying-list{
+	-webkit-padding-start: 30px;	
+	-webkit-padding-end: 20px;
+}
+
 .filter-bar {
-	width: 70%;
+	width: 80%;
 	font-size: 1em;
 	font-weight: 100;
 	display: block;
-    padding: 7px 15px;
-    margin: 10px auto 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 7px 7px;
+    margin: 10px 15px 0 30px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
     box-sizing: border-box;
 }
 
@@ -95,7 +102,7 @@ ul.displaying-list li.place-entry:hover{
 
 /* Styles for map view */
 #map-view {
-	height: 100%;
+	height: calc(100% - 50px);
 	width: 100%;
 	margin: 50px 0 0 0;
 }
