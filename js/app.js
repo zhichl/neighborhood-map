@@ -92,6 +92,7 @@ class ViewModel {
 		} else {
 			this.currentPlaceID = place.placeID
 			this.currentPlaceChanged = true
+			this.map.panTo(place.position)
 		}
 	}
 	
