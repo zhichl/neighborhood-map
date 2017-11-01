@@ -156,7 +156,6 @@ class Place {
 	focus() {
 		// recenter the map by marker's position
 		// use panTo() over setCenter() to add smooth transition effect and prevent reloading the map
-		this.map.panTo(this.position)
 		this.viewModel.focusPlace(this)
 	}
 
@@ -176,7 +175,10 @@ function initMap() {
 	const map = new google.maps.Map(document.getElementById("map-view"), {
 		zoom: 14,
 		center: lombaStreet,
-		styles: mapStyles
+		styles: mapStyles,
+		mapTypeControlOptions: {
+			position: google.maps.ControlPosition.TOP_RIGHT
+		},
 	})
 
 	initViewModel(map, locations)
