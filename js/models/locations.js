@@ -21,7 +21,18 @@ const locations = [{
 },
 
 {
-	name: "Lombard Street",
+	name: "Coit Tower",
+	address: "Coit Tower, San Francisco, CA 94133, USA",
+	position: {
+		lat: 37.802689,
+		lng: -122.405836
+	},
+	types: "bus_station, establishment, point_of_interest, transit_station",
+	placeID: "ChIJbyyyIfeAhYARmg3wBb7t4Ww"
+},
+
+{
+	name: "Lombard Street, SF",
 	address: "Lombard St, San Francisco, CA 94133, USA",
 	position: {
 		lat: 37.802139,
@@ -74,17 +85,6 @@ const locations = [{
 	types: "establishment, point_of_interest, school, university",
 	placeID: "ChIJ5WLIyuWAhYARbzm2ZWKavPY" 
 },
-
-// {
-// 	name: "Golden Gate Bridge",
-// 	address: "Golden Gate Bridge, San Francisco, CA, USA",
-// 	position: {
-// 		lat: 37.819929,
-// 		lng: -122.478255
-// 	},
-// 	types: "establishment, point_of_interest",
-// 	placeID: "ChIJw____96GhYARCVVwg5cT7c0" 
-// },
 
 {
 	name: "Alcatraz Island",
