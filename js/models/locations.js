@@ -43,6 +43,17 @@ const locations = [{
 },
 
 {
+	name: "Transamerica Pyramid",
+	address: "600 Montgomery St, San Francisco, CA 94111, USA",
+	position: {
+		lat: 37.795178,
+		lng: -122.402779
+	},
+	types: "establishment, point_of_interest, premise",
+	placeID: "ChIJQ-U7wYqAhYAReKjwcBt6SGU"
+},
+
+{
 	name: "Madame Tussauds San Francisco",
 	address: "145 Jefferson St #600, San Francisco, CA 94133, USA",
 	position: {
