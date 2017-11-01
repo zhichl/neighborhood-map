@@ -1,6 +1,5 @@
 /* global google, mapStyles, locations, ko*/
 "use strict"
-// import { mapStyles } from "./views/map_styles.js"
 
 let viewModel
 
@@ -72,12 +71,12 @@ class ViewModel {
 		$.ajax(config)
 			.done((data) => {
 				const photos = data.photos.photo
-				const singlePhoto = photos[2]
+				const singlePhoto = photos[0]
 				const imgURL = getFlikrImgURL(singlePhoto)
 				const pageURL = getFlikrWebPageURL(singlePhoto)
 				$(".flickr-content").append(`<img class="flickr-img" alt="No photo from Flickr.com" src=${imgURL}>`)
 				$(".flickr-discription").html(`Click <a href=${pageURL} target="_blank">here</a> to see more about the photo`)
-				// re-center the map when info-window pops up and photo is added
+				// re-pan the map when info-window pops up and photo is added
 				// TODO: pan the map by the center of the whole infoWindow when image is added
 				this.map.panBy(0, -150)
 			})
@@ -95,15 +94,6 @@ class ViewModel {
 			this.map.panTo(place.position)
 		}
 	}
-	
-	// toggleMapDim() {
-	// 	if(this.mapOpacity() === "opacity-normal") {
-	// 		this.mapOpacity("opacity-dim")
-	// 	} else {
-	// 		this.mapOpacity("opacity-normal")
-	// 	}
-	// }
-
 }
 
 class Place {
@@ -131,6 +121,7 @@ class Place {
 		})
 	}
 
+	// match check used by filter
 	checkMatch(content) {
 		let matched = (false || content === "")
 		if (content !== "") {
@@ -167,7 +158,7 @@ class Place {
 
 }
 
-// called as callback when map finishes loading
+// called as callback function when map completes loading
 function initMap() {
 	const lombaStreet = {
 		lat: 37.802139,
@@ -206,6 +197,7 @@ function bounceOnce(marker) {
 	}, 700)
 }
 
+// get the image file source URL
 function getFlikrImgURL(img) {
 	let imgURL = ""
 	if(img) {
@@ -214,6 +206,7 @@ function getFlikrImgURL(img) {
 	return imgURL
 }
 
+// get the image page URL
 function getFlikrWebPageURL(img) {
 	let pageURL = ""
 	if(img) {
