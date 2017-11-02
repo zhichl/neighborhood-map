@@ -17,6 +17,7 @@ body {
 	width: 100%;
 	display: flex;
 }
+
 /* Styles for top bar*/
 .top-bar {
 	display: flex;
@@ -126,8 +127,7 @@ ul.displaying-list li.place-entry:hover{
 .flickr-content .flickr-img {
 	max-width: 230px;
 	display: block;
-    margin: 0 auto;
-	
+	margin: 0 auto;
 }
 
 /* Responsive */
