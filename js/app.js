@@ -93,8 +93,8 @@ class ViewModel {
 				// re-pan the map when photo is loaded
 				$(".flickr-img").on("load", () => {
 					this.panWithLength($(".flickr-img").height())
+					this.updateViewPortMapCenter()
 				})
-				this.updateViewPortMapCenter()
 			})
 			.fail(() => {
 				$(".flickr-discription").text("Failed to fetch photos from Flickr.com, please reload the page")
@@ -224,9 +224,7 @@ function initMap() {
 		zoom: 14,
 		center: lombaStreet,
 		styles: mapStyles,
-		mapTypeControlOptions: {
-			position: google.maps.ControlPosition.TOP_RIGHT
-		},
+		mapTypeControl: false
 	})
 
 	initViewModel(map, locations)
