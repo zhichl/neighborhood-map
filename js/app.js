@@ -21,10 +21,13 @@ class ViewModel {
 		this.mapOpacity = ko.observable("opacity-normal")
 		this.showList = ko.observable("")
 		this.responsiveWidth = 650
+		this.smallScreenWidth = 450
+		this.adjustZoom()
 
 		// responsive
 		google.maps.event.addDomListener(window, "resize", () => {
 			this.map.panTo(this.viewPortMapCenter)
+			this.adjustZoom()
 		})
 
 		// close info-window when clicking on the map
@@ -137,7 +140,14 @@ class ViewModel {
 
 	//TODO: auto hiding list problem
 
-	//TODO: zoom more when width is smaller
+	// adjust zooming level by screen size
+	adjustZoom() {
+		if($(window).width() < this.smallScreenWidth) {
+			this.map.setZoom(13)
+		} else {
+			this.map.setZoom(14)
+		}
+	}
 	
 
 	updateViewPortMapCenter() {
