@@ -26,6 +26,11 @@ class ViewModel {
 		google.maps.event.addDomListener(window, "resize", () => {
 			this.map.panTo(this.viewPortMapCenter)
 		})
+
+		// close info-window when clicking on the map
+		google.maps.event.addListener(map, "click", () => {
+			this.infoWindow.close()
+		})
 	}
 
 	filter() {
