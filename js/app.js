@@ -22,7 +22,7 @@ class ViewModel {
 		this.showList = ko.observable("")
 		this.showListButton = ko.observable(false)
 		this.responsiveWidth = 910
-		this.smallScreenWidth = 450
+		this.smallScreenWidth = 500
 
 		// adjust screen when initialized
 		this.adjustScreen()
