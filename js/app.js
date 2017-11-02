@@ -126,8 +126,7 @@ class ViewModel {
 
 	// pan dynamically with height
 	panWithLength(length) {
-		console.log("this is pan function")
-		const offset = length / 2
+		const offset = length * 0.75
 		this.map.panBy(0, -offset)
 	}
 
