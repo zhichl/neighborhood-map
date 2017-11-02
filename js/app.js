@@ -20,14 +20,17 @@ class ViewModel {
 		})
 		this.mapOpacity = ko.observable("opacity-normal")
 		this.showList = ko.observable("")
-		this.responsiveWidth = 650
+		this.showListButton = ko.observable(false)
+		this.responsiveWidth = 910
 		this.smallScreenWidth = 450
-		this.adjustZoom()
+
+		// adjust screen when initialized
+		this.adjustScreen()
 
 		// responsive
 		google.maps.event.addDomListener(window, "resize", () => {
 			this.map.panTo(this.viewPortMapCenter)
-			this.adjustZoom()
+			this.adjustScreen()
 		})
 
 		// close info-window when clicking on the map
@@ -138,8 +141,26 @@ class ViewModel {
 		this.map.panBy(0, -offset)
 	}
 
-	//TODO: auto hiding list problem
+	adjustScreen() {
+		this.adjustList()
+		this.adjustListButton()
+		this.adjustZoom()
+	}
 
+	// adjust list by screen size
+	adjustList() {
+		if($(window).width() < this.responsiveWidth) {
+			this.showList("hideList")
+		} else {
+			this.showList("showList")
+		}
+	}
+
+	// adjust list-button by screen size
+	adjustListButton() {
+		this.showListButton($(window).width() < this.responsiveWidth)
+	}
+	
 	// adjust zooming level by screen size
 	adjustZoom() {
 		if($(window).width() < this.smallScreenWidth) {
@@ -149,7 +170,6 @@ class ViewModel {
 		}
 	}
 	
-
 	updateViewPortMapCenter() {
 		const 
 			lat0 = this.map.getBounds().getSouthWest().lat(),
@@ -179,9 +199,7 @@ class Place {
 		this.showInList = ko.observable(true)
 
 		this.marker.addListener("click", () => {
-			if($(window).width() < this.viewModel.responsiveWidth) {
-				this.viewModel.hideList()
-			}
+			this.viewModel.adjustList()
 			this.focus()
 			// when clicked, marker bounces once 
 			bounceOnce(this.marker)
@@ -207,9 +225,7 @@ class Place {
 	}
 
 	onListClick() {
-		if($(window).width() < this.viewModel.responsiveWidth) {
-			this.viewModel.hideList()
-		}
+		this.viewModel.adjustList()
 		this.focus()
 		// when clicked, marker bounces once 
 		bounceOnce(this.marker)
@@ -223,6 +239,7 @@ class Place {
 	}
 
 	showInfoWindow() {
+		this.viewModel.adjustList()
 		this.viewModel.setInfoWindow(this)
 		this.viewModel.infoWindow.open(this.map, this.marker)
 	}
