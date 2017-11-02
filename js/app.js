@@ -20,7 +20,7 @@ class ViewModel {
 		})
 		this.mapOpacity = ko.observable("opacity-normal")
 		this.showList = ko.observable("")
-		this.responsiveWidth = 450
+		this.responsiveWidth = 650
 
 		// responsive
 		google.maps.event.addDomListener(window, "resize", () => {
