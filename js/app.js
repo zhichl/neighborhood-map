@@ -89,9 +89,11 @@ class ViewModel {
 				const pageURL = getFlikrWebPageURL(singlePhoto)
 				$(".flickr-content").append(`<img class="flickr-img" alt="No photo from Flickr.com" src=${imgURL}>`)
 				$(".flickr-discription").html(`Click <a href=${pageURL} target="_blank">here</a> to see more about the photo`)
-				// re-pan the map when info-window pops up and photo is added
-				// TODO: pan the map by the center of the whole infoWindow when image is added
-				this.map.panBy(0, -150)
+				
+				// re-pan the map when photo is loaded
+				$(".flickr-img").on("load", () => {
+					this.panWithLength($(".flickr-img").height())
+				})
 				this.updateViewPortMapCenter()
 			})
 			.fail(() => {
@@ -121,6 +123,18 @@ class ViewModel {
 	hideList() {
 		this.showList("hideList")
 	}
+
+	// pan dynamically with height
+	panWithLength(length) {
+		console.log("this is pan function")
+		const offset = length / 2
+		this.map.panBy(0, -offset)
+	}
+
+	//TODO: auto hiding list problem
+
+	//TODO: zoom more when width is smaller
+	
 
 	updateViewPortMapCenter() {
 		const 
