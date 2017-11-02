@@ -1,5 +1,5 @@
 // Retro map style from Google Maps APIs Styling Wizard
-const mapStyles = [{
+let mapStyles = [{
 	"elementType": "geometry",
 	"stylers": [{
 		"color": "#ebe3cd"
@@ -165,3 +165,6 @@ const mapStyles = [{
 	}]
 }
 ]
+
+
+// let dimStyles = 
