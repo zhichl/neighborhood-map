@@ -127,7 +127,7 @@ ul.displaying-list li.place-entry:hover{
 }
 
 /* Responsive */
-@media screen and (max-width: 450px){
+@media screen and (max-width: 650px){
 	.place-list-view {
 		left: -310px;
 	}
