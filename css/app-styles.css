@@ -36,7 +36,7 @@ body {
 
 .list-button {
 	position: absolute;
-	left: 10px;
+	left: 2%;
 	width: 40px;
 	height: 30px;
 	cursor: pointer;
@@ -134,5 +134,11 @@ ul.displaying-list li.place-entry:hover{
 @media screen and (max-width: 650px){
 	.place-list-view {
 		left: -310px;
+	}
+}
+
+@media screen and (max-width: 450px){
+	.top-bar .header h1{
+		font-size: 7vw;
 	}
 }
