@@ -1,6 +1,6 @@
 # SF Neighborhood Map
 
-Demo: [here]( https://zhichl.github.io/neighborhood-map/)
+Demo: [here]( https://zhichl.github.io/neighborhood-map/)  
 This is a responsive single page application that contains a list of selected places to visit at San Francisco main city area.
 
 ## Instructions
