@@ -262,6 +262,10 @@ function initMap() {
 	initViewModel(map, locations)
 }
 
+function onMapError() {
+	$("#map-view .map-view-message").text("Failed to load map, please reload the page")
+}
+
 function initViewModel(map, locations) {
 	viewModel = new ViewModel(map, locations)
 	ko.applyBindings(viewModel)
