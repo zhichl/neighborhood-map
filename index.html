@@ -13,19 +13,21 @@
 
 <body>
 	<div class="container">
-		 <div class="top-bar"> 
+		 <header class="top-bar"> 
 			 <div class="list-button" data-bind="click: toggleList, visible: showListButton">
 					<div class="menu-bar"></div>
 					<div class="menu-bar"></div>
 					<div class="menu-bar"></div>
 			 </div>
-			 <div class="header">
+			 <div class="header-name">
 				 <h1>San Francisco Snippets</h1>
 			 </div>
-		 </div>
+		</header>
+
 		<div id="map-view">
 			<div class="map-view-message"></div>
 		</div>
+
 		<div class="place-list-view" data-bind="css: showList">
 			<input type="text" class="filter-bar" placeholder="Type to filter.." data-bind="textInput: filterInput, event: {keyup: filter}">
 			<div class="place-list">
