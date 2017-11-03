@@ -3,6 +3,7 @@
 
 let viewModel
 
+// app view model
 class ViewModel {
 	constructor(map, locations) {
 		this.map = map
@@ -85,9 +86,9 @@ class ViewModel {
 		return content
 	}
 
+	// fetch photos from Flickr, using flickr.photos.search API method
+	// returns the first search result page with keyword of place name, 20 photos per-page
 	addPhotos(place) {
-		// fetch photos from Flickr, using flickr.photos.search API method
-		// returns the first search result page with keyword of place name, 20 photos per-page
 		const flickrAPI = `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=e3b686486ab791a3710f892b7e5055c0&text=${place.name}&sort=relevance&per_page=20&page=1&format=json&nojsoncallback=1`
 		const config = {
 			url: flickrAPI
@@ -103,7 +104,7 @@ class ViewModel {
 				
 				// re-pan the map when photo is loaded
 				$(".flickr-img").on("load", () => {
-					this.panWithLength($(".flickr-img").height())
+					this.panWithHeight($(".flickr-img").height())
 					this.updateViewPortMapCenter()
 				})
 			})
@@ -112,6 +113,8 @@ class ViewModel {
 			})
 	}
 
+	// focus the place to the center of the map
+	// // use panTo() over setCenter() to add smooth transition effect and prevent reloading the map
 	focusPlace(place) {
 		if(this.currentPlaceID === place.placeID) {
 			this.currentPlaceChanged = false
@@ -123,6 +126,7 @@ class ViewModel {
 		}
 	}
 
+	// show / hide list toggle
 	toggleList() {
 		if(this.showList() === "showList" || this.showList() === "") {
 			this.showList("hideList")
@@ -136,11 +140,12 @@ class ViewModel {
 	}
 
 	// pan dynamically with height
-	panWithLength(length) {
-		const offset = length * 0.75
+	panWithHeight(height) {
+		const offset = height * 0.75
 		this.map.panBy(0, -offset)
 	}
 
+	// adjust the app interface by screen size
 	adjustScreen() {
 		this.adjustList()
 		this.adjustListButton()
@@ -169,7 +174,8 @@ class ViewModel {
 			this.map.setZoom(14)
 		}
 	}
-	
+
+	// track view port center on the map
 	updateViewPortMapCenter() {
 		const 
 			lat0 = this.map.getBounds().getSouthWest().lat(),
@@ -182,6 +188,7 @@ class ViewModel {
 
 }
 
+// place entry view model
 class Place {
 	constructor(map, location, viewModel) {
 		this.map = map
@@ -207,7 +214,7 @@ class Place {
 		})
 	}
 
-	// match check used by filter
+	// match checking used by filter
 	checkMatch(content) {
 		let matched = (false || content === "")
 		if (content !== "") {
@@ -224,6 +231,7 @@ class Place {
 		this.marker.setVisible(false)
 	}
 
+	// called when list place entry is clicked
 	onListClick() {
 		this.viewModel.adjustList()
 		this.focus()
@@ -231,10 +239,9 @@ class Place {
 		bounceOnce(this.marker)
 		this.showInfoWindow()
 	}
-
+	
+	// recenter the map by the place's position
 	focus() {
-		// recenter the map by marker's position
-		// use panTo() over setCenter() to add smooth transition effect and prevent reloading the map
 		this.viewModel.focusPlace(this)
 	}
 
@@ -243,7 +250,6 @@ class Place {
 		this.viewModel.setInfoWindow(this)
 		this.viewModel.infoWindow.open(this.map, this.marker)
 	}
-
 }
 
 // called as callback function when map completes loading
