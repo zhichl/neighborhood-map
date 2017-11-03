@@ -1,9 +1,12 @@
 # SF Neighborhood Map
 
-Demo: [here]( https://zhichl.github.io/neighborhood-map/)  
 This is a responsive single page application that contains a list of selected places to visit at San Francisco main city area.
 
 ## Instructions
+
+**Demo**: [here]( https://zhichl.github.io/neighborhood-map/)  
+
+To run the app locally, download the repo and open index.html directly in browser.  
 
 To see details of a specific place and interact with the app, click on the markers on the map or the name entry on the left side list. On mobile devices or smaller screen, the left side list hides by default. Click the hamburger button on the top bar to show / hide the list. For filtering, type words in the filter bar to real-timely exclude the places you are not interested in both on the list and the map. 
 
