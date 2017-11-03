@@ -23,7 +23,9 @@
 				 <h1>San Francisco Snippets</h1>
 			 </div>
 		 </div>
-		<div id="map-view"></div>
+		<div id="map-view">
+			<div class="map-view-message"></div>
+		</div>
 		<div class="place-list-view" data-bind="css: showList">
 			<input type="text" class="filter-bar" placeholder="Type to filter.." data-bind="textInput: filterInput, event: {keyup: filter}">
 			<div class="place-list">
@@ -40,7 +42,7 @@
 	<script src="./js/models/locations.js"></script>
 	<script src="./js/styles/map_styles.js"></script>
 	<script src="./js/app.js"></script>
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApra2xbeCqSL992NuODd48ZFc-qjJWzso&callback=initMap">
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApra2xbeCqSL992NuODd48ZFc-qjJWzso&callback=initMap" onerror="onMapError()">
 	</script>
 
 </body>
