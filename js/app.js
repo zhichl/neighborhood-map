@@ -1,6 +1,4 @@
 /* global google, mapStyles, locations, ko*/
-"use strict"
-
 let viewModel
 
 // app view model
@@ -69,48 +67,44 @@ class ViewModel {
 		// if current place changed, get new request and set new content
 		// info contents are automatically cached by browser
 		if(this.currentPlaceChanged) {
-			const infoWindowHTML = this.getInfoWindowHTML(place)
+			const infoWindowHTML = 
+			`<div class="info-window-content"> 
+				<h3>${place.name}</h3>
+				<div class="flickr-content">
+					<img class="flickr-img" alt="Loading photo from Flickr.com..." src="">
+					<p class="flickr-discription"></p>
+				</div>
+			</div>`
+
 			this.infoWindow.setContent(infoWindowHTML)
-			this.addPhotos(place)
-		}
-	}
-
-	getInfoWindowHTML(place) {
-		const content = 
-		`<div class="info-window-content"> 
-			<h3>${place.name}</h3>
-			<div class="flickr-content">
-				<p class="flickr-discription"></p>
-			</div>
-		</div>`
-		return content
-	}
-
-	// fetch photos from Flickr, using flickr.photos.search API method
-	// returns the first search result page with keyword of place name, 20 photos per-page
-	addPhotos(place) {
-		const flickrAPI = `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=e3b686486ab791a3710f892b7e5055c0&text=${place.name}&sort=relevance&per_page=20&page=1&format=json&nojsoncallback=1`
-		const config = {
-			url: flickrAPI
-		}
-		$.ajax(config)
-			.done((data) => {
-				const photos = data.photos.photo
-				const singlePhoto = photos[0]
-				const imgURL = getFlikrImgURL(singlePhoto)
-				const pageURL = getFlikrWebPageURL(singlePhoto)
-				$(".flickr-content").append(`<img class="flickr-img" alt="No photo from Flickr.com" src=${imgURL}>`)
-				$(".flickr-discription").html(`Click <a href=${pageURL} target="_blank">here</a> to see more about the photo`)
-				
-				// re-pan the map when photo is loaded
-				$(".flickr-img").on("load", () => {
-					this.panWithHeight($(".flickr-img").height())
-					this.updateViewPortMapCenter()
+			
+			// fetch photos from Flickr, using flickr.photos.search API method
+			// returns the first search result page with keyword of place name, 20 photos per-page
+			const flickrAPI = `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=e3b686486ab791a3710f892b7e5055c0&text=${place.name}&sort=relevance&per_page=20&page=1&format=json&nojsoncallback=1`
+			const config = {
+				url: flickrAPI
+			}
+			$.ajax(config)
+				.done((data) => {
+					const photos = data.photos.photo
+					if(photos.length > 0) {
+						const singlePhoto = photos[0]
+						const imgURL = getFlikrImgURL(singlePhoto)
+						const pageURL = getFlikrWebPageURL(singlePhoto)
+						$(".flickr-discription").html(`Click <a href=${pageURL} target="_blank">here</a> to see more about the photo`)
+						// set img ULR and re-pan the map when photo is loaded
+						$(".flickr-img").on("load", () => {
+							this.panWithHeight($(".flickr-img").height())
+							this.updateViewPortMapCenter()
+						}).attr("src", imgURL)
+					} else {
+						$(".flickr-img").attr("alt", "No photo from Flickr.com")
+					}
 				})
-			})
-			.fail(() => {
-				$(".flickr-discription").text("Failed to fetch photos from Flickr.com, please reload the page")
-			})
+				.fail(() => {
+					$(".flickr-discription").text("Failed to fetch photos from Flickr.com, please reload the page")
+				})
+		}
 	}
 
 	// focus the place to the center of the map
