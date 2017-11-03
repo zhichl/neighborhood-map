@@ -30,7 +30,7 @@ body {
 	justify-content: center;
 }
 
-.top-bar .header h1{
+.top-bar .header-name h1{
 	font-family: 'Saira Semi Condensed', sans-serif;	
 	margin: 0;
 }
@@ -141,7 +141,7 @@ ul.displaying-list li.place-entry:hover{
 }
 
 @media screen and (max-width: 450px){
-	.top-bar .header h1{
+	.top-bar .header-name h1{
 		font-size: 6vw;
 	}
 }
