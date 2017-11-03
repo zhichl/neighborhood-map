@@ -80,7 +80,7 @@ class ViewModel {
 						const singlePhoto = photos[0],
 							imgURL = getFlikrImgURL(singlePhoto),
 							pageURL = getFlikrWebPageURL(singlePhoto),
-							infoWindowHTML = this.getInfoWindowHTML(place.name, imgURL, pageURL)
+							infoWindowHTML = this.getInfoWindowHTML(true, place.name, imgURL, pageURL)
 							
 						this.infoWindow.setContent(infoWindowHTML)
 						// set img ULR and re-pan the map when photo is loaded
@@ -89,29 +89,31 @@ class ViewModel {
 							this.updateViewPortMapCenter()
 						})
 					} else {	// ajax request succeeds, but no photo returned
-						const infoWindowHTML = this.getInfoWindowHTML(place.name)
+						const infoWindowHTML = this.getInfoWindowHTML(true, place.name)
 						this.infoWindow.setContent(infoWindowHTML)
 					}
 				})
 				// ajax request failed
 				.fail(() => {
-					const infoWindowHTML = this.getInfoWindowHTML()
+					const infoWindowHTML = this.getInfoWindowHTML(false, place.name)
 					this.infoWindow.setContent(infoWindowHTML)
 				})
 		}		
 	}
 
 	// general method to generate info-window HTML by request results
-	getInfoWindowHTML(placeName = null, imgURL = null, pageURL = null) {
+	getInfoWindowHTML(success, placeName, imgURL = null, pageURL = null) {
 		let altContent = "", 
 			description = ""
 
-		if(placeName === null) {	// ajax request failed
+		if(success) {
+			if(imgURL === null) {	// ajax request succeeds, but no photo from Flickr
+				altContent = "No photo from Flickr.com"
+			} else {	// ajax request succeeds and photos are returned
+				description = `Click <a href="${pageURL}" target="_blank">here</a> to see more about the photo`
+			}
+		} else {	// ajax request failed
 			description = "Failed to fetch photos from Flickr.com, please reload the page"
-		} else if(imgURL === null) {	// request succeeds, but no photo from Flickr
-			altContent = "No photo from Flickr.com"
-		} else {	// request succeeds and photos are returned
-			description = `Click <a href="${pageURL}" target="_blank">here</a> to see more about the photo`
 		}
 
 		const content = 
