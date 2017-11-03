@@ -133,6 +133,10 @@ ul.displaying-list li.place-entry:hover{
 	margin: 0 auto;
 }
 
+.flickr-content .flickr-img:hover {
+	cursor: pointer;
+}
+
 /* Responsive */
 @media screen and (max-width: 650px){
 	.place-list-view {
